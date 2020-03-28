@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  offlinemessaging.api:
+    image: ${DOCKER_REGISTRY-}offlinemessagingapi
+    build:
+      context: .
+      dockerfile: src/OfflineMessaging.Api/Dockerfile
+    environment:
+      DBServer: "db-server"
+    depends_on:
+      - db-server
+      - elasticsearch
+      - kibana
+    networks:
+      - offlinemessaging
+  db-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Z3+wtsD5rGZM:@fy"
+      MSSQL_PID: "Express"
+    ports:
+      - "1434:1433"
+    networks:
+      - offlinemessaging
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - offlinemessaging
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - bootstrap.memory_lock=true
+      - cluster.name=docker-cluster
+      - network.host= 0.0.0.0
+    ports:
+      - "9200:9200"
+    networks:
+      - offlinemessaging
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.6.0
+    environment:       
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - offlinemessaging
+networks:
+  offlinemessaging:
+    driver: bridge
