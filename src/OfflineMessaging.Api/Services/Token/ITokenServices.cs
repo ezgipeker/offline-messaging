@@ -1,5 +1,5 @@
 ﻿using OfflineMessaging.Domain.Dtos.Token;
-using OfflineMessaging.Domain.Entities.Common;
+using OfflineMessaging.Domain.Entities;
 
 namespace OfflineMessaging.Api.Services.Token
 {

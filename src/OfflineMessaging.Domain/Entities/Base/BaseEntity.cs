@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OfflineMessaging.Domain.Entities.Base
@@ -8,5 +9,7 @@ namespace OfflineMessaging.Domain.Entities.Base
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Column(TypeName = "datetime2")]
+        public DateTime CreateDate { get; set; }
     }
 }

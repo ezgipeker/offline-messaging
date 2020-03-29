@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using OfflineMessaging.Domain.Constants;
 using OfflineMessaging.Domain.Dtos.Token;
-using OfflineMessaging.Domain.Entities.Common;
+using OfflineMessaging.Domain.Entities;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
