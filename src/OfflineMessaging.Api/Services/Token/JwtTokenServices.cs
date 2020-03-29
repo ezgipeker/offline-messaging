@@ -2,7 +2,6 @@
 using Microsoft.IdentityModel.Tokens;
 using OfflineMessaging.Domain.Constants;
 using OfflineMessaging.Domain.Dtos.Token;
-using OfflineMessaging.Domain.Entities;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,7 +16,7 @@ namespace OfflineMessaging.Api.Services.Token
             AccessToken = configuration.GetValue<string>("App:JwtSecretKey");
         }
 
-        public AccessTokenDto CreateToken(User user)
+        public AccessTokenDto CreateToken(CreateTokenParametersDto parameters)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var symmetricKey = Convert.FromBase64String(AccessToken);
@@ -26,8 +25,8 @@ namespace OfflineMessaging.Api.Services.Token
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("UserId", user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName)
+                    new Claim("UserId", parameters.UserId.ToString()),
+                    new Claim(ClaimTypes.Name, parameters.UserName)
                 }),
                 Expires = DateTime.UtcNow.AddDays(Convert.ToInt32(TokenConstants.GetExprationDate())),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)

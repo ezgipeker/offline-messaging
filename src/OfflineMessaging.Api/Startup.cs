@@ -8,8 +8,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using OfflineMessaging.Api.Services;
+using OfflineMessaging.Api.Services.Message;
 using OfflineMessaging.Api.Services.Token;
+using OfflineMessaging.Api.Services.User;
 using OfflineMessaging.Infrastructure.Context;
 using Serilog;
 using System;
@@ -30,7 +31,10 @@ namespace OfflineMessaging.Api
             services.AddCors();
             services.AddControllers();
             services.AddScoped<ITokenServices, JwtTokenServices>();
-            services.AddScoped<ITestServices, TestServices>();
+            services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<ICrudUserServices, CrudUserServices>();
+            services.AddScoped<ICheckUserServices, CheckUserServices>();
+            services.AddScoped<IMessageServices, MessageServices>();
 
             var connectionString = Configuration["Db:ConnectionString"];
             services.AddDbContext<OfflineMessagingContext>(options => options.UseSqlServer(connectionString));
