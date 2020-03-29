@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OfflineMessaging.Api.Services;
 using OfflineMessaging.Api.Services.Token;
+using OfflineMessaging.Infrastructure.Context;
 using Serilog;
 using System;
 
@@ -29,6 +31,9 @@ namespace OfflineMessaging.Api
             services.AddControllers();
             services.AddScoped<ITokenServices, JwtTokenServices>();
             services.AddScoped<ITestServices, TestServices>();
+
+            var connectionString = Configuration["Db:ConnectionString"];
+            services.AddDbContext<OfflineMessagingContext>(options => options.UseSqlServer(connectionString));
 
             var secretKey = Configuration.GetValue<string>("App:JwtSecretKey");
             var symmetricKey = Convert.FromBase64String(secretKey);
