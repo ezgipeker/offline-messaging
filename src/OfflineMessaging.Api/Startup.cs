@@ -102,6 +102,8 @@ namespace OfflineMessaging.Api
             {
                 endpoints.MapControllers();
             });
+
+            DatabaseHelper.PrepareDatabase(app);
         }
     }
 }
