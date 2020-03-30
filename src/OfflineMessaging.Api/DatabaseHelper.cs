@@ -25,8 +25,8 @@ namespace OfflineMessaging.Api
             if (!context.Users.Any())
             {
                 context.Users.AddRange(
-                    new User { CreateDate = DateTime.Now, UserName = "testuser", FirstName = "Test", LastName = "User", Email = "test@test.com", Password = "testpassword" },
-                    new User { CreateDate = DateTime.Now, UserName = "dummyuser", FirstName = "Dummy", LastName = "User", Email = "dummy@test.com", Password = "dummypassword" });
+                    new User { CreateDate = DateTime.Now, UserName = "testuser", FirstName = "Test", LastName = "User", Email = "test@test.com", Password = "CKBgEDtlvGR49dBEUN3uwHNmK42PKlxEgdJmwRD7IMQ=ærM1tqCXhDv+BgMz0AdOuOA==" },
+                    new User { CreateDate = DateTime.Now, UserName = "dummyuser", FirstName = "Dummy", LastName = "User", Email = "dummy@test.com", Password = "vEGeyhr6wIMinnnxWyisXiCLSaPAHynnuCD+fCCY2tU=æbYqjmEs6QWHl9xh1YpzOiA==" });
 
                 context.SaveChanges();
             }

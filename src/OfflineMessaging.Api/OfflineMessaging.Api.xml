@@ -55,7 +55,7 @@
             </summary>
             <remarks>
             Sample request:
-                GET message/get-last-message/ezgipeker
+                GET message/get-last-message/testuser
             </remarks>
             <param name="from"></param>
             <returns>Last message from user</returns>
@@ -66,7 +66,7 @@
             </summary>
             <remarks>
             Sample request:
-                GET message/get-message-history/ezgipeker/1/10
+                GET message/get-message-history/testuser/1/10
             </remarks>
             <param name="from">From user name</param>
             <param name="pageIndex">Page index for pagination</param>
