@@ -53,5 +53,83 @@ namespace OfflineMessaging.Api.ServicesTests.User
             _checkUserServices.Verify(x => x.CheckUserExistByUserNameAsync(It.Is<string>(b => b == userName)), Times.Once);
             _crudUserServices.Verify(x => x.AddUserAsync(It.Is<UserDto>(b => b == @object)), Times.Once);
         }
+
+        [Theory]
+        [InlineData("testusername", "TestFirstName", "TestLastName", "testemail@test.com", "niBbRshzNi1q2F4FOwOq6wfWjvLHJSyJ974Hb8HMY34=ælBZAqjrEVpEmyvVsvzyOtA==")]
+        public async Task RegisterAsync_ShouldReturnSuccessFalse_WhenUserEmailAlreadyExist(string userName, string firstName, string lastName, string email, string password)
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var @object = fixture.Build<UserDto>()
+                .With(x => x.UserName, userName)
+                .With(x => x.FirstName, firstName)
+                .With(x => x.LastName, lastName)
+                .With(x => x.Email, email)
+                .With(x => x.Password, password)
+                .Create();
+
+            _checkUserServices.Setup(x => x.CheckUserExistByEmailAsync(email)).ReturnsAsync(true);
+
+            //Act
+            var sut = await _userServices.RegisterAsync(@object);
+
+            //Assert
+            sut.Success.Should().BeFalse();
+            _checkUserServices.Verify(x => x.CheckUserExistByEmailAsync(It.Is<string>(b => b == email)), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("testusername", "TestFirstName", "TestLastName", "testemail@test.com", "niBbRshzNi1q2F4FOwOq6wfWjvLHJSyJ974Hb8HMY34=ælBZAqjrEVpEmyvVsvzyOtA==")]
+        public async Task RegisterAsync_ShouldReturnSuccessFalse_WhenUserNameAlreadyExist(string userName, string firstName, string lastName, string email, string password)
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var @object = fixture.Build<UserDto>()
+                .With(x => x.UserName, userName)
+                .With(x => x.FirstName, firstName)
+                .With(x => x.LastName, lastName)
+                .With(x => x.Email, email)
+                .With(x => x.Password, password)
+                .Create();
+
+            _checkUserServices.Setup(x => x.CheckUserExistByEmailAsync(email)).ReturnsAsync(false);
+            _checkUserServices.Setup(x => x.CheckUserExistByUserNameAsync(userName)).ReturnsAsync(true);
+
+            //Act
+            var sut = await _userServices.RegisterAsync(@object);
+
+            //Assert
+            sut.Success.Should().BeFalse();
+            _checkUserServices.Verify(x => x.CheckUserExistByEmailAsync(It.Is<string>(b => b == email)), Times.Once);
+            _checkUserServices.Verify(x => x.CheckUserExistByUserNameAsync(It.Is<string>(b => b == userName)), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("testusername", "TestFirstName", "TestLastName", "testemail@test.com", "niBbRshzNi1q2F4FOwOq6wfWjvLHJSyJ974Hb8HMY34=ælBZAqjrEVpEmyvVsvzyOtA==")]
+        public async Task RegisterAsync_ShouldReturnSuccessFalse_WhenAddUserReturnSuccessFalse(string userName, string firstName, string lastName, string email, string password)
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var @object = fixture.Build<UserDto>()
+                .With(x => x.UserName, userName)
+                .With(x => x.FirstName, firstName)
+                .With(x => x.LastName, lastName)
+                .With(x => x.Email, email)
+                .With(x => x.Password, password)
+                .Create();
+
+            _checkUserServices.Setup(x => x.CheckUserExistByEmailAsync(email)).ReturnsAsync(false);
+            _checkUserServices.Setup(x => x.CheckUserExistByUserNameAsync(userName)).ReturnsAsync(false);
+            _crudUserServices.Setup(x => x.AddUserAsync(@object)).ReturnsAsync(false);
+
+            //Act
+            var sut = await _userServices.RegisterAsync(@object);
+
+            //Assert
+            sut.Success.Should().BeFalse();
+            _checkUserServices.Verify(x => x.CheckUserExistByEmailAsync(It.Is<string>(b => b == email)), Times.Once);
+            _checkUserServices.Verify(x => x.CheckUserExistByUserNameAsync(It.Is<string>(b => b == userName)), Times.Once);
+            _crudUserServices.Verify(x => x.AddUserAsync(It.Is<UserDto>(b => b == @object)), Times.Once);
+        }
     }
 }
