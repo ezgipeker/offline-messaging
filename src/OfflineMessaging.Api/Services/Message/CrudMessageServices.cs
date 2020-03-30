@@ -45,12 +45,13 @@ namespace OfflineMessaging.Api.Services.Message
 
         public async Task<List<MessageHistoryDto>> GetMessageHistoryAsync(GetMessageHistoryParametersDto parameters)
         {
-            var messageList = _context.Messages.Where(x => (x.SenderUserId == parameters.SenderUserId && x.ReceiverUserId == parameters.ReceiverUserId) || (x.SenderUserId == parameters.ReceiverUserId && x.ReceiverUserId == parameters.SenderUserId))
+            var messageList = await _context.Messages.Where(x => (x.SenderUserId == parameters.SenderUserId && x.ReceiverUserId == parameters.ReceiverUserId) || (x.SenderUserId == parameters.ReceiverUserId && x.ReceiverUserId == parameters.SenderUserId))
                 .OrderByDescending(x => x.CreateDate)
                 .Skip(parameters.PageIndex * parameters.PageSize)
-                .Take(parameters.PageSize);
+                .Take(parameters.PageSize)
+                .ToListAsync();
 
-            var result = await messageList.Select(x => new MessageHistoryDto
+            var result = messageList.Select(x => new MessageHistoryDto
             {
                 Id = x.Id,
                 SenderUserId = x.SenderUserId,
@@ -61,7 +62,7 @@ namespace OfflineMessaging.Api.Services.Message
                 Content = x.Content,
                 IsRead = x.IsRead,
                 ReadDate = x.ReadDate
-            }).ToListAsync();
+            }).ToList();
 
             return result;
         }

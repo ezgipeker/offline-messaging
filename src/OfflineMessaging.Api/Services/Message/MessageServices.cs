@@ -92,15 +92,12 @@ namespace OfflineMessaging.Api.Services.Message
                 return new GetMessageHistoryResponseDto { Success = false, Message = "Konuşma geçmişi bulunamadı." };
             }
 
-            foreach (var messageHistory in messageHistoryList)
+            foreach (var messageHistory in messageHistoryList.Where(x => x.IsRead == false))
             {
-                if (!messageHistory.IsRead)
+                var updateSuccess = await _crudMessageServices.UpdateMessageReadInfoAsync(messageHistory.Id);
+                if (!updateSuccess)
                 {
-                    var updateSuccess = await _crudMessageServices.UpdateMessageReadInfoAsync(messageHistory.Id);
-                    if (!updateSuccess)
-                    {
-                        Log.ForContext<MessageServices>().Error("{method} message read info update unsuccessful! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
-                    }
+                    Log.ForContext<MessageServices>().Error("{method} message read info update unsuccessful! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
                 }
             }
 
@@ -109,6 +106,8 @@ namespace OfflineMessaging.Api.Services.Message
                 Success = true,
                 MessageHistoryList = messageHistoryList
             };
+
+            Log.ForContext<MessageServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
 
             return result;
         }

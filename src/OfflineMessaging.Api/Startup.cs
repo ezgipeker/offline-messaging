@@ -35,6 +35,7 @@ namespace OfflineMessaging.Api
             services.AddScoped<ICrudUserServices, CrudUserServices>();
             services.AddScoped<ICheckUserServices, CheckUserServices>();
             services.AddScoped<IMessageServices, MessageServices>();
+            services.AddScoped<ICrudMessageServices, CrudMessageServices>();
 
             var connectionString = Configuration["Db:ConnectionString"];
             services.AddDbContext<OfflineMessagingContext>(options => options.UseSqlServer(connectionString));
