@@ -24,11 +24,11 @@ namespace OfflineMessaging.Api.Controllers.Block
         [Route("user")]
         [ProducesResponseType(typeof(BlockUserResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> BlockUser([FromBody]BlockUserParametersDto parameters)
+        public async Task<IActionResult> BlockUserAsync([FromBody]BlockUserParametersDto parameters)
         {
             if (parameters == null || string.IsNullOrWhiteSpace(parameters.BlockedUserName))
             {
-                Log.ForContext<BlockController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(BlockUser), parameters);
+                Log.ForContext<BlockController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(BlockUserAsync), parameters);
                 return BadRequest("Lütfen bloklanacak kullanıcı adını giriniz.");
             }
 

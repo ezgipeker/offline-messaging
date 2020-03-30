@@ -24,11 +24,11 @@ namespace OfflineMessaging.Api.Controllers.Message
         [Route("send")]
         [ProducesResponseType(typeof(SendMessageResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Send([FromBody]SendMessageParametersDto parameters)
+        public async Task<IActionResult> SendAsync([FromBody]SendMessageParametersDto parameters)
         {
             if (parameters == null || string.IsNullOrWhiteSpace(parameters.To))
             {
-                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(Send), parameters);
+                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(SendAsync), parameters);
                 return BadRequest("Lütfen mesajı göndermek istediğiniz kişiyi giriniz.");
             }
 
@@ -42,11 +42,11 @@ namespace OfflineMessaging.Api.Controllers.Message
         [Route("get-last-message")]
         [ProducesResponseType(typeof(GetLastMessageResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetLastMessage(GetLastMessageParametersDto parameters)
+        public async Task<IActionResult> GetLastMessageAsync(GetLastMessageParametersDto parameters)
         {
             if (parameters == null || string.IsNullOrWhiteSpace(parameters.From))
             {
-                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetLastMessage), parameters);
+                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetLastMessageAsync), parameters);
                 return BadRequest("Lütfen mesajını okumak istediğiniz kişiyi giriniz.");
             }
 
@@ -60,11 +60,11 @@ namespace OfflineMessaging.Api.Controllers.Message
         [Route("get-message-history")]
         [ProducesResponseType(typeof(GetMessageHistoryResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetMessageHistory(GetMessageHistoryParametersDto parameters)
+        public async Task<IActionResult> GetMessageHistoryAsync(GetMessageHistoryParametersDto parameters)
         {
             if (parameters == null || parameters.PageIndex < 1 || parameters.PageSize < 1 || string.IsNullOrWhiteSpace(parameters.From))
             {
-                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetMessageHistory), parameters);
+                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
                 return BadRequest("Lütfen parametreleri doğru gönderiniz.");
             }
 

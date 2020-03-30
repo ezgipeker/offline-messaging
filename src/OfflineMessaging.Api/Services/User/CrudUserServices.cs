@@ -28,7 +28,9 @@ namespace OfflineMessaging.Api.Services.User
                 Password = parameters.Password
             });
 
-            return await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync() > 0;
+
+            return result;
         }
 
         public async Task<Domain.Entities.User> GetUserByUserNameAsync(string username)

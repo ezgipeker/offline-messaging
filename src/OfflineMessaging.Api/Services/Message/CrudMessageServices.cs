@@ -35,12 +35,25 @@ namespace OfflineMessaging.Api.Services.Message
             return result;
         }
 
-        public async Task<Domain.Entities.Message> GetLastMessageAsync(GetLastMessageParametersDto parameters)
+        public async Task<MessageHistoryDto> GetLastMessageAsync(GetLastMessageParametersDto parameters)
         {
             var lastMessage = await _context.Messages.OrderByDescending(x => x.CreateDate)
                 .FirstOrDefaultAsync(x => x.SenderUserId == parameters.SenderUserId && x.ReceiverUserId == parameters.ReceiverUserId);
 
-            return lastMessage;
+            var result = new MessageHistoryDto
+            {
+                Id = lastMessage.Id,
+                SenderUserId = lastMessage.SenderUserId,
+                SenderUserName = _crudUserServices.GetUser(lastMessage.SenderUserId).UserName,
+                ReceiverUserId = lastMessage.ReceiverUserId,
+                ReceiverUserName = _crudUserServices.GetUser(lastMessage.ReceiverUserId).UserName,
+                SendDate = lastMessage.CreateDate,
+                Content = lastMessage.Content,
+                IsRead = lastMessage.IsRead,
+                ReadDate = lastMessage.ReadDate
+            };
+
+            return result;
         }
 
         public async Task<List<MessageHistoryDto>> GetMessageHistoryAsync(GetMessageHistoryParametersDto parameters)

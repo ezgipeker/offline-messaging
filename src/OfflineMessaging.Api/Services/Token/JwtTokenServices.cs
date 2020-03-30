@@ -11,6 +11,7 @@ namespace OfflineMessaging.Api.Services.Token
     public class JwtTokenServices : ITokenServices
     {
         public string AccessToken { get; set; }
+
         public JwtTokenServices(IConfiguration configuration)
         {
             AccessToken = configuration.GetValue<string>("App:JwtSecretKey");

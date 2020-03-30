@@ -23,7 +23,9 @@ namespace OfflineMessaging.Api.Services.Block
                 BlockedUserId = parameters.BlockedUserId
             });
 
-            return await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync() > 0;
+
+            return result;
         }
     }
 }

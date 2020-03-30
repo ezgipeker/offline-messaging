@@ -37,7 +37,8 @@ namespace OfflineMessaging.Api.Services.Block
                 return new BlockUserResponseDto { Success = false, Message = "Bloklama sırasında bir hata oluştu. Lütfen tekrar deneyiniz." };
             }
 
-            Log.ForContext<BlockServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(BlockUserAsync), parameters);
+            Log.ForContext<BlockServices>().Information("{method} finished. User successfully blocked! Parameters: {@parameters}", nameof(BlockUserAsync), parameters);
+
             return new BlockUserResponseDto { Success = true, Message = "Kullanıcı bloklandı." };
         }
     }

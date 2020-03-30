@@ -4,6 +4,6 @@ namespace OfflineMessaging.Domain.Dtos.Message
 {
     public class GetLastMessageResponseDto : BaseResponseDto
     {
-        public Entities.Message LastMessage { get; set; }
+        public MessageHistoryDto LastMessage { get; set; }
     }
 }

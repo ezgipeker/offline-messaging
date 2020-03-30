@@ -30,15 +30,15 @@ namespace OfflineMessaging.Api.Services.User
             var hashedPassword = parameters.Password.Pbkdf2Hash(salt);
             parameters.Password = hashedPassword;
 
-            var emailCheck = await _checkUserServices.CheckUserExistByEmailAsync(parameters.Email);
-            if (emailCheck)
+            var isEmailExist = await _checkUserServices.CheckUserExistByEmailAsync(parameters.Email);
+            if (isEmailExist)
             {
                 Log.ForContext<UserServices>().Error("{method} email already exist! Parameters: {@parameters}", nameof(RegisterAsync), parameters);
                 return new UserRegisterResponseDto { Success = false, Message = "Bu email zaten mevcut." };
             }
 
-            var userNameCheck = await _checkUserServices.CheckUserExistByUserNameAsync(parameters.UserName);
-            if (userNameCheck)
+            var isUserNameExist = await _checkUserServices.CheckUserExistByUserNameAsync(parameters.UserName);
+            if (isUserNameExist)
             {
                 Log.ForContext<UserServices>().Error("{method} user name already exist! Parameters: {@parameters}", nameof(RegisterAsync), parameters);
                 return new UserRegisterResponseDto { Success = false, Message = "Bu kullanıcı adı zaten mevcut." };
@@ -52,7 +52,8 @@ namespace OfflineMessaging.Api.Services.User
                 return new UserRegisterResponseDto { Success = false, Message = "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyiniz." };
             }
 
-            Log.ForContext<UserServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(RegisterAsync), parameters);
+            Log.ForContext<UserServices>().Information("{method} finished. User successfully registered! Parameters: {@parameters}", nameof(RegisterAsync), parameters);
+
             return new UserRegisterResponseDto { Success = true, Message = "Kayıt başarılı." };
         }
 
@@ -75,8 +76,10 @@ namespace OfflineMessaging.Api.Services.User
 
             var token = _tokenServices.CreateToken(new CreateTokenParametersDto { UserId = user.Id, UserName = user.UserName });
 
-            Log.ForContext<UserServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(LoginAsync), parameters);
-            return new UserLoginResponseDto { Success = true, Token = token };
+            var response = new UserLoginResponseDto { Success = true, Token = token };
+            Log.ForContext<UserServices>().Information("{method} finished. User successfully logged in! Parameters: {@parameters}, Response: {@response}", nameof(LoginAsync), parameters, response);
+
+            return response;
         }
     }
 }

@@ -27,14 +27,14 @@ namespace OfflineMessaging.Api.Services.Message
             var receiverUser = await _crudUserServices.GetUserByUserNameAsync(parameters.To);
             if (receiverUser == null)
             {
-                Log.ForContext<MessageServices>().Error("{method} receiverUser not found! Parameters: {@parameters}", nameof(SendAsync), parameters);
+                Log.ForContext<MessageServices>().Error("{method} receiver user not found! Parameters: {@parameters}", nameof(SendAsync), parameters);
                 return new SendMessageResponseDto { Success = false, Message = "Böyle bir kullanıcı bulunamadı." };
             }
 
             var isUserBlocked = await _checkUserServices.CheckUserBlockedAsync(receiverUser.Id, parameters.SenderUserId);
             if (isUserBlocked)
             {
-                Log.ForContext<MessageServices>().Information("{method} CheckUserBlockedAsync return true! Parameters: {@parameters}", nameof(SendAsync), parameters);
+                Log.ForContext<MessageServices>().Error("{method} failed. User blocked! Parameters: {@parameters}", nameof(SendAsync), parameters);
                 return new SendMessageResponseDto { Success = false, Message = "Mesaj gönderimi sırasında bir hata oluştu. Lütfen tekrar deneyiniz." };
             }
 
@@ -51,7 +51,8 @@ namespace OfflineMessaging.Api.Services.Message
                 return new SendMessageResponseDto { Success = false, Message = "Mesaj gönderimi sırasında bir hata oluştu. Lütfen tekrar deneyiniz." };
             }
 
-            Log.ForContext<MessageServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(SendAsync), parameters);
+            Log.ForContext<MessageServices>().Information("{method} finished. Message sent successfully! Parameters: {@parameters}", nameof(SendAsync), parameters);
+
             return new SendMessageResponseDto { Success = true, Message = "Mesaj gönderildi." };
         }
 
@@ -60,7 +61,7 @@ namespace OfflineMessaging.Api.Services.Message
             var senderUser = await _crudUserServices.GetUserByUserNameAsync(parameters.From);
             if (senderUser == null)
             {
-                Log.ForContext<MessageServices>().Error("{method} senderUser not found! Parameters: {@parameters}", nameof(GetLastMessageAsync), parameters);
+                Log.ForContext<MessageServices>().Error("{method} sender user not found! Parameters: {@parameters}", nameof(GetLastMessageAsync), parameters);
                 return new GetLastMessageResponseDto { Success = false, Message = "Böyle bir kullanıcı bulunamadı." };
             }
 
@@ -72,14 +73,16 @@ namespace OfflineMessaging.Api.Services.Message
                 return new GetLastMessageResponseDto { Success = false, Message = "Mesaj bulunamadı." };
             }
 
-            var updateSuccess = await _crudMessageServices.UpdateMessageReadInfoAsync(lastMessage.Id);
-            if (!updateSuccess)
+            var isUpdateSuccess = await _crudMessageServices.UpdateMessageReadInfoAsync(lastMessage.Id);
+            if (!isUpdateSuccess)
             {
-                Log.ForContext<MessageServices>().Error("{method} message read info update unsuccessful! Parameters: {@parameters}", nameof(GetLastMessageAsync), parameters);
+                Log.ForContext<MessageServices>().Warning("{method} message read info update unsuccessful! MessageId: {messageId}", nameof(GetLastMessageAsync), lastMessage.Id);
             }
 
-            Log.ForContext<MessageServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(GetLastMessageAsync), parameters);
-            return new GetLastMessageResponseDto { Success = true, LastMessage = lastMessage };
+            var response = new GetLastMessageResponseDto { Success = true, LastMessage = lastMessage };
+            Log.ForContext<MessageServices>().Information("{method} finished successfully! Parameters: {@parameters}, Response: {@response}", nameof(GetLastMessageAsync), parameters, response);
+
+            return response;
         }
 
         public async Task<GetMessageHistoryResponseDto> GetMessageHistoryAsync(GetMessageHistoryParametersDto parameters)
@@ -87,7 +90,7 @@ namespace OfflineMessaging.Api.Services.Message
             var senderUser = await _crudUserServices.GetUserByUserNameAsync(parameters.From);
             if (senderUser == null)
             {
-                Log.ForContext<MessageServices>().Error("{method} senderUser not found! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
+                Log.ForContext<MessageServices>().Error("{method} sender user not found! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
                 return new GetMessageHistoryResponseDto { Success = false, Message = "Böyle bir kullanıcı bulunamadı." };
             }
 
@@ -103,22 +106,17 @@ namespace OfflineMessaging.Api.Services.Message
 
             foreach (var messageHistory in messageHistoryList.Where(x => x.IsRead == false))
             {
-                var updateSuccess = await _crudMessageServices.UpdateMessageReadInfoAsync(messageHistory.Id);
-                if (!updateSuccess)
+                var isUpdateSuccess = await _crudMessageServices.UpdateMessageReadInfoAsync(messageHistory.Id);
+                if (!isUpdateSuccess)
                 {
-                    Log.ForContext<MessageServices>().Error("{method} message read info update unsuccessful! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
+                    Log.ForContext<MessageServices>().Warning("{method} message read info update unsuccessful! MessageId: {messageId}", nameof(GetMessageHistoryAsync), messageHistory.Id);
                 }
             }
 
-            var result = new GetMessageHistoryResponseDto
-            {
-                Success = true,
-                MessageHistoryList = messageHistoryList
-            };
+            var response = new GetMessageHistoryResponseDto { Success = true, MessageHistoryList = messageHistoryList };
+            Log.ForContext<MessageServices>().Information("{method} finished successfully! Parameters: {@parameters}, Response: {@response}", nameof(GetMessageHistoryAsync), parameters, response);
 
-            Log.ForContext<MessageServices>().Information("{method} finished successfully! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
-
-            return result;
+            return response;
         }
     }
 }
