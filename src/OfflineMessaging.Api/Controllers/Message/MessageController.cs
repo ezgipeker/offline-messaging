@@ -60,11 +60,11 @@ namespace OfflineMessaging.Api.Controllers.Message
         [Route("get-message-history")]
         [ProducesResponseType(typeof(GetMessageHistoryResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetMessageHistoryAsync(GetMessageHistoryParametersDto parameters)
+        public async Task<IActionResult> GetMessageHistory(GetMessageHistoryParametersDto parameters)
         {
             if (parameters == null || parameters.PageIndex < 1 || parameters.PageSize < 1 || string.IsNullOrWhiteSpace(parameters.From))
             {
-                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
+                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetMessageHistory), parameters);
                 return BadRequest("Lütfen parametreleri doğru gönderiniz.");
             }
 

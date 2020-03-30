@@ -31,8 +31,4 @@
     <ProjectReference Include="..\OfflineMessaging.Infrastructure\OfflineMessaging.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Block\" />
-  </ItemGroup>
-
 </Project>
