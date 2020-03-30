@@ -20,6 +20,11 @@ namespace OfflineMessaging.Api.Controllers.User
             _userServices = userServices;
         }
 
+        /// <summary>
+        /// User register
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]

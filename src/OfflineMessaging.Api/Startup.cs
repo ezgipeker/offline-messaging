@@ -15,6 +15,7 @@ using OfflineMessaging.Api.Services.User;
 using OfflineMessaging.Infrastructure.Context;
 using Serilog;
 using System;
+using System.IO;
 
 namespace OfflineMessaging.Api
 {
@@ -77,6 +78,8 @@ namespace OfflineMessaging.Api
                         Url = new Uri("https://github.com/ezgipeker")
                     }
                 });
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, "OfflineMessaging.Api.xml");
+                c.IncludeXmlComments(xmlPath, true);
             });
         }
 

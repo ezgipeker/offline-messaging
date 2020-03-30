@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OfflineMessaging.Api</name>
+    </assembly>
+    <members>
+        <member name="M:OfflineMessaging.Api.Controllers.User.UserController.RegisterAsync(OfflineMessaging.Domain.Dtos.User.UserDto)">
+            <summary>
+            User register
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
