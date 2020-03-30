@@ -16,14 +16,25 @@ namespace OfflineMessaging.Api.Services.User
 
         public async Task<bool> CheckUserExistByEmailAsync(string email)
         {
-            return await _context.Users.AnyAsync(x => x.Email == email);
+            var result = await _context.Users.AnyAsync(x => x.Email == email);
+
+            return result;
         }
 
         public async Task<bool> CheckUserExistByUserNameAsync(string userName)
         {
-            return await _context.Users.AnyAsync(x => x.UserName == userName);
+            var result = await _context.Users.AnyAsync(x => x.UserName == userName);
+
+            return result;
         }
 
         public bool CheckPasswordCompatibility(string password, string hashedPassword) => password.ValidateHash(hashedPassword);
+
+        public async Task<bool> CheckUserBlockedAsync(int blockerUserId, int blockedUserId)
+        {
+            var result = await _context.Blocks.AnyAsync(x => x.BlockerUserId == blockerUserId && x.BlockedUserId == blockedUserId);
+
+            return result;
+        }
     }
 }

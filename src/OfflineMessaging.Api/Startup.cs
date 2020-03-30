@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OfflineMessaging.Api.Services.Block;
 using OfflineMessaging.Api.Services.Message;
 using OfflineMessaging.Api.Services.Token;
 using OfflineMessaging.Api.Services.User;
@@ -36,6 +37,8 @@ namespace OfflineMessaging.Api
             services.AddScoped<ICheckUserServices, CheckUserServices>();
             services.AddScoped<IMessageServices, MessageServices>();
             services.AddScoped<ICrudMessageServices, CrudMessageServices>();
+            services.AddScoped<IBlockServices, BlockServices>();
+            services.AddScoped<ICrudBlockServices, CrudBlockServices>();
 
             var connectionString = Configuration["Db:ConnectionString"];
             services.AddDbContext<OfflineMessagingContext>(options => options.UseSqlServer(connectionString));

@@ -7,5 +7,6 @@ namespace OfflineMessaging.Api.Services.User
         Task<bool> CheckUserExistByEmailAsync(string email);
         Task<bool> CheckUserExistByUserNameAsync(string userName);
         bool CheckPasswordCompatibility(string password, string hashedPassword);
+        Task<bool> CheckUserBlockedAsync(int blockerUserId, int blockedUserId);
     }
 }

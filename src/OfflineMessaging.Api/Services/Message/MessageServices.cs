@@ -12,12 +12,14 @@ namespace OfflineMessaging.Api.Services.Message
         private readonly OfflineMessagingContext _context;
         private readonly ICrudMessageServices _crudMessageServices;
         private readonly ICrudUserServices _crudUserServices;
+        private readonly ICheckUserServices _checkUserServices;
 
-        public MessageServices(OfflineMessagingContext context, ICrudMessageServices crudMessageServices, ICrudUserServices crudUserServices)
+        public MessageServices(OfflineMessagingContext context, ICrudMessageServices crudMessageServices, ICrudUserServices crudUserServices, ICheckUserServices checkUserServices)
         {
             _context = context;
             _crudMessageServices = crudMessageServices;
             _crudUserServices = crudUserServices;
+            _checkUserServices = checkUserServices;
         }
 
         public async Task<SendMessageResponseDto> SendAsync(SendMessageParametersDto parameters)
@@ -27,6 +29,13 @@ namespace OfflineMessaging.Api.Services.Message
             {
                 Log.ForContext<MessageServices>().Error("{method} receiverUser not found! Parameters: {@parameters}", nameof(SendAsync), parameters);
                 return new SendMessageResponseDto { Success = false, Message = "Böyle bir kullanıcı bulunamadı." };
+            }
+
+            var isUserBlocked = await _checkUserServices.CheckUserBlockedAsync(receiverUser.Id, parameters.SenderUserId);
+            if (isUserBlocked)
+            {
+                Log.ForContext<MessageServices>().Information("{method} CheckUserBlockedAsync return true! Parameters: {@parameters}", nameof(SendAsync), parameters);
+                return new SendMessageResponseDto { Success = false, Message = "Mesaj gönderimi sırasında bir hata oluştu. Lütfen tekrar deneyiniz." };
             }
 
             var success = await _crudMessageServices.AddMessageAsync(new MessageDto
