@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OfflineMessaging.Api.Controllers.User
 {
+    /// <summary>
+    /// User Controller
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -15,16 +18,28 @@ namespace OfflineMessaging.Api.Controllers.User
     {
         private readonly IUserServices _userServices;
 
+        /// ctor
         public UserController(IUserServices userServices)
         {
             _userServices = userServices;
         }
 
         /// <summary>
-        /// User register
+        /// User register (AllowAnonymous. Do not send token.)
         /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     POST user/register
+        ///     {
+        ///         "UserName" : "ezgipeker",
+        ///         "FirstName": "Ezgi",
+        ///         "LastName": "Peker",
+        ///         "Email": "ezgi.peker.6@gmail.com",
+        ///         "Password": "Password123"
+        ///      }
+        /// </remarks>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <returns>Register response</returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
@@ -43,6 +58,19 @@ namespace OfflineMessaging.Api.Controllers.User
             return Ok(response);
         }
 
+        /// <summary>
+        /// User login (AllowAnonymous. Do not send token.)
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     POST user/login
+        ///     {
+        ///         "UserName" : "ezgipeker",
+        ///         "Password": "Password123"
+        ///     }
+        /// </remarks>
+        /// <param name="parameters"></param>
+        /// <returns>Login response and token</returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]

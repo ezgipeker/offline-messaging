@@ -40,6 +40,11 @@ namespace OfflineMessaging.Api.Services.Message
             var lastMessage = await _context.Messages.OrderByDescending(x => x.CreateDate)
                 .FirstOrDefaultAsync(x => x.SenderUserId == parameters.SenderUserId && x.ReceiverUserId == parameters.ReceiverUserId);
 
+            if (lastMessage == null)
+            {
+                return null;
+            }
+
             var result = new MessageHistoryDto
             {
                 Id = lastMessage.Id,

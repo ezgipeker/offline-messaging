@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OfflineMessaging.Api.Controllers.Message
 {
+    /// <summary>
+    /// Message Controller
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -15,11 +18,25 @@ namespace OfflineMessaging.Api.Controllers.Message
     {
         private readonly IMessageServices _messageServices;
 
+        /// ctor
         public MessageController(IMessageServices messageServices)
         {
             _messageServices = messageServices;
         }
 
+        /// <summary>
+        /// Send message to user by username.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     POST message/send
+        ///     {
+        ///         "To": "testuser",
+        ///         "Content": "Hi!"
+        ///      }
+        /// </remarks>
+        /// <param name="parameters"></param>
+        /// <returns>Send message response</returns>
         [HttpPost]
         [Route("send")]
         [ProducesResponseType(typeof(SendMessageResponseDto), (int)HttpStatusCode.OK)]
@@ -38,37 +55,69 @@ namespace OfflineMessaging.Api.Controllers.Message
             return Ok(response);
         }
 
+        /// <summary>
+        /// Get last message from user by username.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     GET message/get-last-message/testuser
+        /// </remarks>
+        /// <param name="from"></param>
+        /// <returns>Last message from user</returns>
         [HttpGet]
-        [Route("get-last-message")]
+        [Route("get-last-message/{from}")]
         [ProducesResponseType(typeof(GetLastMessageResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetLastMessageAsync(GetLastMessageParametersDto parameters)
+        public async Task<IActionResult> GetLastMessageAsync([FromRoute]string from)
         {
-            if (parameters == null || string.IsNullOrWhiteSpace(parameters.From))
+            if (string.IsNullOrWhiteSpace(from))
             {
-                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetLastMessageAsync), parameters);
+                Log.ForContext<MessageController>().Error("{method} parameters is not valid! From: {from}", nameof(GetLastMessageAsync), from);
                 return BadRequest("Lütfen mesajını okumak istediğiniz kişiyi giriniz.");
             }
 
-            parameters.ReceiverUserId = int.Parse(User.FindFirst("UserId")?.Value);
+            var parameters = new GetLastMessageParametersDto
+            {
+                ReceiverUserId = int.Parse(User.FindFirst("UserId")?.Value),
+                From = from
+            };
+
             var response = await _messageServices.GetLastMessageAsync(parameters);
 
             return Ok(response);
         }
 
+        /// <summary>
+        /// Get message history between two users with pagination.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     GET message/get-message-history/testuser/1/10
+        /// </remarks>
+        /// <param name="from">From user name</param>
+        /// <param name="pageIndex">Page index for pagination</param>
+        /// <param name="pageSize">Page size for pagination</param>
+        /// <returns>Message history between two users</returns>
         [HttpGet]
-        [Route("get-message-history")]
+        [Route("get-message-history/{from}/{pageIndex:int}/{pageSize:int}")]
         [ProducesResponseType(typeof(GetMessageHistoryResponseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetMessageHistoryAsync(GetMessageHistoryParametersDto parameters)
+        public async Task<IActionResult> GetMessageHistoryAsync([FromRoute]string from, [FromRoute]int pageIndex, [FromRoute]int pageSize)
         {
-            if (parameters == null || parameters.PageIndex < 1 || parameters.PageSize < 1 || string.IsNullOrWhiteSpace(parameters.From))
+            if (pageIndex < 1 || pageSize < 1 || string.IsNullOrWhiteSpace(from))
             {
-                Log.ForContext<MessageController>().Error("{method} parameters is not valid! Parameters: {@parameters}", nameof(GetMessageHistoryAsync), parameters);
+                Log.ForContext<MessageController>().Error("{method} parameters is not valid! From: {from}, PageIndex: {pageIndex}, PageSize: {pageSize}", nameof(GetMessageHistoryAsync), from, pageIndex, pageSize);
                 return BadRequest("Lütfen parametreleri doğru gönderiniz.");
             }
 
-            parameters.ReceiverUserId = int.Parse(User.FindFirst("UserId")?.Value);
+            var parameters = new GetMessageHistoryParametersDto
+            {
+                ReceiverUserId = int.Parse(User.FindFirst("UserId")?.Value),
+                From = from,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+            
             var response = await _messageServices.GetMessageHistoryAsync(parameters);
 
             return Ok(response);

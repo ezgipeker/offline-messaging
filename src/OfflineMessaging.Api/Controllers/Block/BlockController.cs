@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OfflineMessaging.Api.Controllers.Block
 {
+    /// <summary>
+    /// Block Controller
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -15,11 +18,24 @@ namespace OfflineMessaging.Api.Controllers.Block
     {
         private readonly IBlockServices _blockServices;
 
+        /// ctor
         public BlockController(IBlockServices blockServices)
         {
             _blockServices = blockServices;
         }
 
+        /// <summary>
+        /// Block user by username.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     POST block/user
+        ///     {
+        ///         "BlockedUserName": "dummyuser"
+        ///     }
+        /// </remarks>
+        /// <param name="parameters"></param>
+        /// <returns>Block user response</returns>
         [HttpPost]
         [Route("user")]
         [ProducesResponseType(typeof(BlockUserResponseDto), (int)HttpStatusCode.OK)]

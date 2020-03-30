@@ -4,12 +4,115 @@
         <name>OfflineMessaging.Api</name>
     </assembly>
     <members>
+        <member name="T:OfflineMessaging.Api.Controllers.Block.BlockController">
+            <summary>
+            Block Controller
+            </summary>
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.Block.BlockController.#ctor(OfflineMessaging.Api.Services.Block.IBlockServices)">
+            ctor
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.Block.BlockController.BlockUserAsync(OfflineMessaging.Domain.Dtos.Block.BlockUserParametersDto)">
+            <summary>
+            Block user by username.
+            </summary>
+            <remarks>
+            Sample request:
+                POST block/user
+                {
+                    "BlockedUserName": "dummyuser"
+                }
+            </remarks>
+            <param name="parameters"></param>
+            <returns>Block user response</returns>
+        </member>
+        <member name="T:OfflineMessaging.Api.Controllers.Message.MessageController">
+            <summary>
+            Message Controller
+            </summary>
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.Message.MessageController.#ctor(OfflineMessaging.Api.Services.Message.IMessageServices)">
+            ctor
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.Message.MessageController.SendAsync(OfflineMessaging.Domain.Dtos.Message.SendMessageParametersDto)">
+            <summary>
+            Send message to user by username.
+            </summary>
+            <remarks>
+            Sample request:
+                POST message/send
+                {
+                    "To": "testuser",
+                    "Content": "Hi!"
+                 }
+            </remarks>
+            <param name="parameters"></param>
+            <returns>Send message response</returns>
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.Message.MessageController.GetLastMessageAsync(System.String)">
+            <summary>
+            Get last message from user by username.
+            </summary>
+            <remarks>
+            Sample request:
+                GET message/get-last-message/ezgipeker
+            </remarks>
+            <param name="from"></param>
+            <returns>Last message from user</returns>
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.Message.MessageController.GetMessageHistoryAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Get message history between two users with pagination.
+            </summary>
+            <remarks>
+            Sample request:
+                GET message/get-message-history/ezgipeker/1/10
+            </remarks>
+            <param name="from">From user name</param>
+            <param name="pageIndex">Page index for pagination</param>
+            <param name="pageSize">Page size for pagination</param>
+            <returns>Message history between two users</returns>
+        </member>
+        <member name="T:OfflineMessaging.Api.Controllers.User.UserController">
+            <summary>
+            User Controller
+            </summary>
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.User.UserController.#ctor(OfflineMessaging.Api.Services.User.IUserServices)">
+            ctor
+        </member>
         <member name="M:OfflineMessaging.Api.Controllers.User.UserController.RegisterAsync(OfflineMessaging.Domain.Dtos.User.UserDto)">
             <summary>
-            User register
+            User register (AllowAnonymous. Do not send token.)
             </summary>
+            <remarks>
+            Sample request:
+                POST user/register
+                {
+                    "UserName" : "ezgipeker",
+                    "FirstName": "Ezgi",
+                    "LastName": "Peker",
+                    "Email": "ezgi.peker.6@gmail.com",
+                    "Password": "Password123"
+                 }
+            </remarks>
             <param name="parameters"></param>
-            <returns></returns>
+            <returns>Register response</returns>
+        </member>
+        <member name="M:OfflineMessaging.Api.Controllers.User.UserController.LoginAsync(OfflineMessaging.Domain.Dtos.User.UserLoginParametersDto)">
+            <summary>
+            User login (AllowAnonymous. Do not send token.)
+            </summary>
+            <remarks>
+            Sample request:
+                POST user/login
+                {
+                    "UserName" : "ezgipeker",
+                    "Password": "Password123"
+                }
+            </remarks>
+            <param name="parameters"></param>
+            <returns>Login response and token</returns>
         </member>
     </members>
 </doc>
