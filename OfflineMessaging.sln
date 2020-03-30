@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfflineMessaging.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflineMessaging.Api.IntegrationTests", "tests\OfflineMessaging.Api.IntegrationTests\OfflineMessaging.Api.IntegrationTests.csproj", "{9344E24B-6447-4C11-AB62-CB82D24586C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflineMessaging.Api.ServicesTests", "tests\OfflineMessaging.Api.ServicesTests\OfflineMessaging.Api.ServicesTests.csproj", "{2B165D0A-7690-4831-B1EC-797B9C85314E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{9344E24B-6447-4C11-AB62-CB82D24586C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9344E24B-6447-4C11-AB62-CB82D24586C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9344E24B-6447-4C11-AB62-CB82D24586C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B165D0A-7690-4831-B1EC-797B9C85314E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B165D0A-7690-4831-B1EC-797B9C85314E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B165D0A-7690-4831-B1EC-797B9C85314E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B165D0A-7690-4831-B1EC-797B9C85314E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 		{AD33BCB3-908E-41E5-B74C-C18126D2F2B4} = {C407B751-D375-4CA3-9E06-BCBDC107809A}
 		{46AE600D-2850-4646-B357-2EE049A392B5} = {2B12668A-2F1E-40C5-92F6-2A1447587A67}
 		{9344E24B-6447-4C11-AB62-CB82D24586C9} = {2B12668A-2F1E-40C5-92F6-2A1447587A67}
+		{2B165D0A-7690-4831-B1EC-797B9C85314E} = {2B12668A-2F1E-40C5-92F6-2A1447587A67}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72B47600-8585-4B67-94CA-24288FA4E68C}
